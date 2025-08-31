@@ -1,0 +1,14 @@
+# Compiled binaries
+benchmark
+benchmark_*
+# Shared libraries
+*.so
+
+# Temp files
+*.o
+*.out
+a.out
+
+# Test outputs
+*.log
+output.txt
