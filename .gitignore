@@ -1,3 +1,7 @@
+# Build directory
+build/
+
+*.md
 # Compiled binaries
 benchmark
 benchmark_*
