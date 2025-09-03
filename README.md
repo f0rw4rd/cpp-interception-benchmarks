@@ -29,27 +29,27 @@ source .venv/bin/activate
 
 #### Hot Path Functions
 ![Hot Path Performance](results/performance_hot_path.png)
-**Shows**: Overhead for frequently-called functions (10M calls). This simulates intercepting functions in tight loops or critical performance paths.
+**Shows**: Overhead for frequently-called functions (1M calls). This simulates intercepting functions in tight loops or critical performance paths.
 
 #### Heavy Work Functions
 ![Heavy Work Performance](results/performance_heavy_work.png)
-**Shows**: Impact on CPU-intensive functions (100K calls with computation). Tests whether interception overhead is noticeable when the function itself does significant work.
+**Shows**: Impact on CPU-intensive functions (1M calls with computation). Tests whether interception overhead is noticeable when the function itself does significant work.
 
 #### Recursive Functions
 ![Recursive Performance](results/performance_recursive.png)
-**Shows**: Overhead for recursive functions like factorial. Each recursive call triggers the hook, multiplying the interception cost.
+**Shows**: Overhead for recursive functions like factorial (1M calls of factorial(20)). Each recursive call triggers the hook, multiplying the interception cost.
 
 #### Array Operations
 ![Array Operations Performance](results/performance_array_ops.png)
-**Shows**: Performance impact on functions that process arrays with pointer arithmetic. Common in systems programming and data processing.
+**Shows**: Performance impact on functions that process arrays with pointer arithmetic (100K calls processing 1000-element arrays). Common in systems programming and data processing.
 
 #### Memory Operations
 ![Memory Operations Performance](results/performance_memory_ops.png)
-**Shows**: Overhead for functions doing dynamic memory allocation/deallocation. Critical for understanding impact on memory-intensive applications.
+**Shows**: Overhead for functions doing dynamic memory allocation/deallocation (1M calls allocating 1KB). Critical for understanding impact on memory-intensive applications.
 
 #### Complex Path Performance
 ![Complex Path Performance](results/performance_complex_path.png)
-**Shows**: Combined performance across multiple interception scenarios, representing real-world mixed workloads.
+**Shows**: Performance for compute_sum_complex function (1M calls). Tests interception overhead on functions with more complex control flow.
 
 ### Memory Usage Analysis
 ![Memory Usage](results/performance_memory.png)
@@ -89,7 +89,9 @@ frida -l frida_both.js ./benchmark
 - **Frida JavaScript**: Higher overhead due to JavaScript VM context switches
 - **V8 vs QuickJS**: V8 generally performs better than QuickJS for complex operations
 
-**Why only hot_path shows overhead**: The benchmark uses 1M-iteration heavy calculations in hooks to simulate real instrumentation overhead. With different call counts:
-- Hot path: 10M calls × 2M calculations = visible overhead in results
-- Recursive/Array/Memory: 10K-100K calls × 2M calculations = causes timeout (20-200 seconds per run)
-The heavy calculations make non-hot-path functions too slow to complete within reasonable time, so their times appear unchanged (baseline performance before timeout).
+**Call Frequencies**:
+- **Hot path & Heavy work**: 1M calls each (compute_sum and compute_sum_heavy)
+- **Recursive**: 1M calls to factorial(20) - each call internally makes 20 recursive calls
+- **Array ops**: 100K calls processing 1000-element arrays
+- **Memory ops**: 1M calls allocating/freeing 1KB
+- **Complex path**: 1M calls to compute_sum_complex
