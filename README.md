@@ -95,3 +95,9 @@ frida -l frida_both.js ./benchmark
 - **Array ops**: 100K calls processing 1000-element arrays
 - **Memory ops**: 1M calls allocating/freeing 1KB
 - **Complex path**: 1M calls to compute_sum_complex
+
+## Support
+
+If you find this project useful, consider supporting development:
+
+[![Ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/f0rw4rd)
